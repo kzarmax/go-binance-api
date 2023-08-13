@@ -1,4 +1,4 @@
-package binance
+package binance_api
 
 const SymbolSOLBUSD = "SOLBUSD"
 const SymbolSOLUSDT = "SOLUSDT"

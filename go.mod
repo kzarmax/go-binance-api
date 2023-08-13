@@ -1,4 +1,4 @@
-module go-binance-api
+module github.com/kjeih/go-binance-api
 
 go 1.20
 

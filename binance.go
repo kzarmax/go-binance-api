@@ -1,11 +1,10 @@
-package binance
+package binance_api
 
 import (
 	"context"
 	"fmt"
+	"github.com/adshao/go-binance/v2"
 	"github.com/adshao/go-binance/v2/futures"
-	"github.com/go-binance-api/config"
-	"github.com/go-binance-api/logger"
 	"strconv"
 	"time"
 )
@@ -18,8 +17,8 @@ type BinanceService struct {
 }
 
 func NewBinanceService() *BinanceService {
-	futuresClient := binance.NewFuturesClient(config.Config.Binance.ApiKey, config.Config.Binance.SecretKey)
-	client := binance.NewClient(config.Config.Binance.ApiKey, config.Config.Binance.SecretKey)
+	futuresClient := binance.NewFuturesClient(Config.Binance.ApiKey, Config.Binance.SecretKey)
+	client := binance.NewClient(Config.Binance.ApiKey, Config.Binance.SecretKey)
 	return &BinanceService{
 		Client:       client,
 		FutureClient: futuresClient,
@@ -141,10 +140,6 @@ func (b *BinanceService) NewOrder(
 	side futures.SideType,
 	quantity string,
 ) (*FutureOrder, error) {
-	if config.NoSubmit {
-		logger.Outlog("NewOrder Skipped :Not allowed")
-		return nil, nil
-	}
 	order, err := b.FutureClient.
 		NewCreateOrderService().
 		PositionSide("BOTH").
@@ -155,7 +150,7 @@ func (b *BinanceService) NewOrder(
 		Do(context.Background())
 
 	if err != nil {
-		logger.Outlog("Binance: Failed to create order" + err.Error())
+		Outlog("Binance: Failed to create order" + err.Error())
 		return nil, err
 	}
 	result := &FutureOrder{}

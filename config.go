@@ -1,4 +1,4 @@
-package binance
+package binance_api
 
 import (
 	"github.com/jinzhu/configor"

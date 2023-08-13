@@ -1,8 +1,7 @@
-package binance
+package binance_api
 
 import (
 	"fmt"
-	"go-binance-api/config"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,18 +17,10 @@ func TargetSetup(filename string) {
 	logTargetChannel = make(chan string, 100000)
 
 	go func() {
-		if !config.IsLogToFile() {
-			log.SetFlags(0)
-			log.SetOutput(os.Stdout)
-			for msg := range logTargetChannel {
-				log.Print(msg)
-			}
-		} else {
-			f, _ := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-			for msg := range logTargetChannel {
-				f.WriteString(msg)
-			}
-			f.Close()
+		log.SetFlags(0)
+		log.SetOutput(os.Stdout)
+		for msg := range logTargetChannel {
+			log.Print(msg)
 		}
 	}()
 	bInitTarget = true
@@ -54,22 +45,10 @@ func Setup(filename string) {
 	logChannel = make(chan string, 100000)
 
 	go func() {
-		if !config.IsLogToFile() {
-			log.SetFlags(0)
-			log.SetOutput(os.Stdout)
-			for msg := range logChannel {
-				log.Print(msg)
-			}
-		} else {
-			f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-			if err != nil {
-				println(filename)
-				panic(err)
-			}
-			for msg := range logChannel {
-				f.WriteString(msg)
-			}
-			f.Close()
+		log.SetFlags(0)
+		log.SetOutput(os.Stdout)
+		for msg := range logChannel {
+			log.Print(msg)
 		}
 	}()
 	bInit = true
