@@ -1,4 +1,4 @@
-package binance_api_test
+package binance_api
 
 import (
 	"fmt"
@@ -13,15 +13,15 @@ import (
 )
 
 func init() {
-	binance_api.BasePath = "../../../"
-	binance_api.Initialize()
+	BasePath = "../../../"
+	Initialize()
 	logfile := filepath.Join("logs", time.Now().UTC().Format("2006_01_02_00_00_00")+".log")
-	binance_api.Setup(logfile)
+	Setup(logfile)
 }
 
 func subscribePrice() {
 	recv := make(chan futures.WsDepthEvent)
-	go binance_api.SubscribeFuturesOrderbook("SOLBUSD", recv)
+	go SubscribeFuturesOrderbook("SOLBUSD", recv)
 	for {
 		priceData := <-recv
 		bidPrice, _, err := priceData.Bids[0].Parse()
@@ -36,7 +36,7 @@ func subscribePrice() {
 
 func subscribeKPrice() {
 	recv := make(chan futures.WsKlineEvent)
-	go binance_api.SubscribeFuturesKline("SOLBUSD", recv)
+	go SubscribeFuturesKline("SOLBUSD", recv)
 	for {
 		priceData := <-recv
 		openPrice, err := strconv.ParseFloat(priceData.Kline.Open, 64)
@@ -55,7 +55,7 @@ func subscribeKPrice() {
 
 func subscribeSpotPrice(symbol string) {
 	recv := make(chan *binance2.WsPartialDepthEvent)
-	go binance_api.SubscribeSpotPrice(symbol, recv)
+	go SubscribeSpotPrice(symbol, recv)
 	for {
 		priceData := <-recv
 		bidPrice, _, err := priceData.Bids[0].Parse()
@@ -70,7 +70,7 @@ func subscribeSpotPrice(symbol string) {
 
 func subscribeSpotKlinePrice(symbol string) {
 	recv := make(chan *binance2.WsKlineEvent)
-	go binance_api.SubscribeSpotKlinePrice(symbol, recv)
+	go SubscribeSpotKlinePrice(symbol, recv)
 	for {
 		priceData := <-recv
 		openPrice, err := strconv.ParseFloat(priceData.Kline.Open, 64)
@@ -88,7 +88,7 @@ func subscribeSpotKlinePrice(symbol string) {
 }
 
 func getPosition() {
-	service := binance_api.NewBinanceService()
+	service := NewBinanceService()
 	pos, err := service.GetPosition("SOLBUSD")
 	if err != nil {
 		print(err)
@@ -98,7 +98,7 @@ func getPosition() {
 }
 
 func buy() {
-	service := binance_api.NewBinanceService()
+	service := NewBinanceService()
 	result, err := service.Buy("SOLBUSD", 1)
 	if err != nil {
 		print(err)
@@ -108,7 +108,7 @@ func buy() {
 }
 
 func sell() {
-	service := binance_api.NewBinanceService()
+	service := NewBinanceService()
 	result, err := service.Sell("SOLBUSD", 1)
 	if err != nil {
 		print(err)
