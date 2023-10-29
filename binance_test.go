@@ -130,5 +130,4 @@ func TestBinance(t *testing.T) {
 	//getPosition()
 	//buy()
 	time.Sleep(3 * time.Second)
-
 }
